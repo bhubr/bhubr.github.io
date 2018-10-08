@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>App.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="App.html">
+                  src/App.js
+                </a>
+              
+                
+                <a class="source" href="Counter.html">
+                  src/Counter.js
+                </a>
+              
+                
+                <a class="source" href="index.html">
+                  src/index.js
+                </a>
+              
+                
+                <a class="source" href="serviceWorker.html">
+                  src/serviceWorker.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>App.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> React, { Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'./App.css'</span>;
+<span class="hljs-keyword">import</span> Counter <span class="hljs-keyword">from</span> <span class="hljs-string">'./Counter'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Le composant <code>App</code> est écrit sous forme de classe.
+C’est indispensable à partir du moment où on veut gérer
+un state.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Le constructeur est l’endroit où on va initialiser le state.
+On est obligé d’appeler le constructeur de la classe parente <code>Component</code>
+en appelant <code>super(props);</code>. C’est le constructeur de <code>Component</code> qui
+initialise <code>this.props</code>, mais on ne le voit pas ici.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">constructor</span>(props) {
+      <span class="hljs-keyword">super</span>(props);
+      <span class="hljs-keyword">this</span>.state = {
+          <span class="hljs-attr">limit</span>: <span class="hljs-number">10</span>
+      };
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>La méthode <code>setLimit</code> va servir de “gestionnaire d’évènements”, du fait
+qu’on la passe comme attribut <code>onChange</code> à l’<code>input</code> dans le <code>render()</code>.
+Elle reçoit un objet <code>event</code> qui contient un certain nombre de propriétés.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  setLimit = <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Celle qui nous intéresse le plus est <code>event.target</code>, qui est l’élément du DOM
+(l’arborescence des noeuds HTML) sur lequel s’est produit l’évènement (ici l’<code>input</code>).
+<code>event.target</code> est lui-même un objet qui a des propriétés, par exemple ici:</p>
+<ul>
+<li><code>event.target.type</code> qui vaut <code>text</code>.</li>
+<li><code>event.target.value</code> qui est la valeur entrée dans le champ (une <strong>chaîne</strong>)</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">const</span> newLimitString = event.target.value;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>On convertit <code>event.target.value</code> en <strong>nombre</strong>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">const</span> newLimit = <span class="hljs-built_in">Number</span>(newLimitString);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>On utilise ensuite <code>this.setState</code> pour modifier le state.
+En effet, on ne peut <strong>pas</strong> écrire:</p>
+<ul>
+<li><code>this.state = { limit: limit };</code></li>
+<li><code>this.state.limit = limit;</code></li>
+</ul>
+<p>Attention, <code>this.setState</code> est une <em>méthode</em>, donc quelque chose
+qui s’<em>appelle</em> en lui passant des arguments. <code>setState</code> est
+aussi une méthode héritée de la classe <code>Component</code> fournie par React.
+L’argument obligatoire est un <em>objet</em> sur lequel on indique quelle
+“partie” du state on veut mettre à jour.
+Ici le state n’a qu’une paire “clé-valeur”, on remplace la valeur
+associée à la clé <code>limit</code> par une nouvelle valeur (<code>newLimit</code>)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.setState({
+      <span class="hljs-attr">limit</span>: newLimit
+    })
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>La méthode <code>render</code> est présente sur tous les composants écrits sous forme de classe.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  render() {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>On récupère la valeur de la limite stockée dans le state.
+On s’en sert dans le JSX pour donner une propriété
+(clé <code>limit</code> et <code>limitValue</code> comme valeur associée)
+à deux des trois <code>Counter</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">const</span> limitValue = <span class="hljs-keyword">this</span>.state.limit
+
+    <span class="hljs-keyword">return</span> (
+      &lt;div className="App"&gt;
+
+        &lt;input id="limit" type="text" value={this.state.limit} onChange={this.setLimit} /&gt;
+      
+        &lt;Counter limit={limitValue} /&gt;
+        &lt;Counter limit={limitValue} /&gt;
+        &lt;Counter /&gt;
+
+      &lt;/div&gt;
+    );
+  }
+}
+
+export default App;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
