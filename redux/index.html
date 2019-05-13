@@ -14,41 +14,31 @@
     clavier: b = slide précédent, n = slide suivant, r = retour au 1er slide
   </div>
 
+  <div id="slide"></div>
+
   <header>
     <h2 id="title"></h2>
     <p id="subtitle"></p>
+    <p id="description"></p>
   </header>
 
   <main>
 
-    <div class="wrapped-component">
-
-        <div class="component">
-          <div class="caption">LightComponent</div>
-          <div class="injectedProps">
-            <div>light</div>
-            <div>dispatch</div>
-          </div>
-      
-        </div>
-        <div class="caption">LightContainer</div>
-        <div class="mapStateToProps"><span>mapStateToProps</span></div>
-        <div class="mapDispatchToProps"></div>
-        <div class="connect">
-          connect
-        </div>
-
-    </div>
-
     <div class="store">
       <div class="caption">Store</div>
+      <img id="a" class="arrow" src="share.svg" />
+      <img id="b" class="arrow" src="share.svg" />
+      <img id="c" class="arrow" src="share.svg" />
+      <img id="d" class="arrow" src="share.svg" />
+      <span id="dispatching-action"></span>
+      <span id="prev-state"></span>
 
-      <div class="">
+      <div class="box internal">
         <div id="caption-internal" class="caption caption-light"></div>
         <div class="store-attribute state">state
           <div id="state-value"></div>
         </div>
-        <!-- <div class="store-attribute reducer">
+        <div class="store-attribute reducer">
           reducer
           <span class="icon-cog"></span>
           <div id="next-state">
@@ -57,10 +47,10 @@
               <span></span>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
 
-      <div class="">
+      <div class="box public">
         <div id="caption-public" class="caption caption-light"></div>
         <div class="store-method dispatch">dispatch</div>
         <div class="store-method getState">getState</div>
@@ -68,13 +58,99 @@
       </div>
     </div>
 
+    <aside id="side-code"></aside>
   </main>
 
   <script src="js/prism.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
   <script>
+  // PER APP
+  const addAction = `{
+    type: 'ADD'
+  }`;
+  const removeAction = `{
+    type: 'REMOVE'
+  }`;
+  const storeReducerCode = `// REDUCER
+const counterReducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'ADD':
+      return state + 1;
+    case 'REMOVE':
+      return state - 1;
+    default:
+      return state;
+  }
+};
 
+// STORE
+const { createStore } = Redux;
+const store = createStore(counterReducer);
+`;
+    const reducerCode = `// REDUCER
+const counterReducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'ADD':
+      return state + 1;
+    case 'REMOVE':
+      return state - 1;
+    default:
+      return state;
+  }
+}`;
+    const reducerCodeCaseAdd = `
+    case 'ADD':
+      return state + 1;`;
+    const reducerCodeCaseSub = `
+    case 'REMOVE':
+      return state - 1;`;
+    const addActionCode = `// ACTIONS
+const addAction = {
+  type: 'ADD',
+};
+
+// #add is the "plus" button in the UI
+const add = document.getElementById('add');
+
+// addAction is dispatched to the store when
+// "plus" button is clicked
+add.addEventListener('click', () => {
+  store.dispatch(addAction);
+});
+`;
+    const subActionCode = `// ACTIONS
+const removeAction = {
+  type: 'REMOVE',
+};
+
+// #remove is the "minus" button in the UI
+const remove = document.getElementById('remove');
+
+// addAction is dispatched to the store when
+// "minus" button is clicked
+remove.addEventListener('click', () => {
+  store.dispatch(removeAction);
+});
+`;
+const storeSubscribeCode = `
+// p#render-store is where the
+// counter value is displayed
+const renderStore = document.getElementById(
+  'render-store'
+);
+
+// this gets the state's value
+// from the store and displays it
+const render = () => {
+  renderStore.innerHTML = store.getState();
+}
+
+// store.subscribe is given a
+// function as parameter, which will
+// be called on each state change
+store.subscribe(render);
+`;
   // INTERNATIONALIZATION
   function parseQuery(queryString) {
     const query = {};
@@ -87,9 +163,90 @@
   }
   const strings = {
     fr: {
-     
+      REDUX_SLIDE_1: `# Redux
+      
+Quête *Un compteur avec Redux et JavaScript (sans React)*
+`,
+      REDUX_SLIDE_2: `
+Les applications front-end doivent gérer des données dynamiques (états).
+
+Exemple (application de chat) :
+
+* Données de l'utilisateur connecté (nom, avatar, etc.)
+* Contacts et leur statut (hors-ligne, disponible, occupé)
+* Messages et leur statut (lu ou non)
+`,
+      REDUX_SLIDE_3: `
+La gestion des états peut devenir problématique.
+
+À mesure qu'une application s'étoffe, il est difficile de prévoir les interactions entre des données dynamiques situées en différents endroits.
+`,
+      REDUX_SLIDE_4: `
+**Redux** offre une solution efficace à la gestion de l'état. La librarie est décrite en ces termes sur sa [page d'accueil](https://redux.js.org/) :
+
+> A predictable state container for JavaScript apps. 
+
+* *container* : l'état est centralisé dans un conteneur, le *store*.
+* *predictable* : le passage d'un état à un autre est prédictible.
+`,
+      REDUX_SLIDE_5: `
+## Concepts
+
+* *state* : données dynamiques de l'application.
+* *store* : l'endroit où est stocké le state. **On ne modifie pas directement le state**, on effectue les modifications via des *actions*.
+* *action* : *objet* envoyé au store, qui spécifie un type de modification à apporter à l'état.
+* *reducer* : *fonction* qui calcule une nouvelle valeur pour le state, à partir d'une action.
+`,
+      REDUX_SLIDE_6: `
+## Exemple
+
+Application de compteur [sur CodePen](https://codepen.io/bhubr/pen/wbWWYj)
+`,
+      STORE_CREATION: 'Création du store',
+      CAPTION_INTERNAL: "Interne (<strong>inaccessible</strong> depuis l'extérieur)",
+      CAPTION_PUBLIC: "Public (accessible depuis l'extérieur)",
+      STATE_INITIALIZATION: "Appel de `createStore` en lui passant le reducer. La valeur initiale du state est ici `0` (paramètre `state = 0` de `counterReducer`).",
+      STATE_INITIALIZATION_CODE: '```const store = createStore(counterReducer);```',
+      DISPATCH_INIT_ACTION: `2. Dispatch d'une action spéciale INIT : ceci est fait systématiquement par Redux lors de l'initialisation du store par \`createStore\`, et a pour effet d'appeler une première fois le reducer.
+      
+      Le state passé au reducer vaut \`undefined\`. Remarquez \`state = 0\` dans les paramètres de \`counterReducer\` : 0 est une valeur par défaut à donner à \`state\` si celui-ci est \`undefined\`.`,
+      DISPATCH_INIT_ACTION_DESC: "",
+      DISPATCH_ADD_ACTION: "Dispatch (envoi) de l'action ADD",
+      DISPATCH_ADD_ACTION_SUB1: "1. Suite à un clic sur le bouton +, le code de l'application envoie l'action `addAction` au store.",
+      DISPATCH_ADD_ACTION_SUB2: `2. Le store appelle le reducer, en lui fournissant l'**action** et la **valeur courante du state**.
+  
+Suivant le \`case\` auquel il correspond, \`action.type\` va déterminer ce que va renvoyer le reducer.
+`,
+      DISPATCH_ADD_ACTION_CODE: '```store.dispatch(addAction);```',
+      DISPATCH_ADD_ACTION_SUB3: "3. Le reducer calcule la **nouvelle valeur** du state, à partir de la valeur courante et de l'action, et **renvoie** cette nouvelle valeur.",
+      DISPATCH_ADD_ACTION_SUB4: "4. La valeur renvoyée par le reducer devient la valeur du state.",
+      DISPATCH_ADD_ACTION_AGAIN: "Dispatch de l'action ADD une 2ème fois",
+      DISPATCH_ADD_ACTION_AGAIN_SUB1: "1. Après un 2ème clic sur le bouton +, le code de l'application envoie à nouveau l'action `addAction` au store.",
+      STORE_SUBSCRIBE: "Réagir aux changements d'état",
+      STORE_SUBSCRIBE_SUB: `La méthode \`subscribe()\` du store prend en paramètre une fonction. Cette fonction va être appelée à chaque fois que le \`state\` change (donc consécutivement au cycle dispatch / appel du reducer qu'on vient de voir).
+
+**Remarque**: Lorsqu'on utilisera Redux avec React, un autre mécanisme sera fourni pour cela.
+`,
+      STORE_GETSTATE: "Récupérer le state depuis le store",
+      STORE_GETSTATE_SUB: `Le store fournit une méthode \`getState()\` qui permet de récupérer la valeur du \`state\` (celle-ci étant *interne* au store, et non-accessible directement). La fonction \`render()\` récupère la valeur du compteur via cette méthode, et l'insère dans le paragraphe \`#render-store\`.
+
+**Remarque**: comme pour \`subscribe\`, un autre mécanisme sera fourni lorsqu'on travaillera avec React.
+`,
+      DISPATCH_SUB_ACTION: "Dispatch de l'action REMOVE",
+      DISPATCH_SUB_ACTION_SUB1: "1. Suite à un clic sur le bouton -, le code de l'application envoie l'action `removeAction` au store.",
+      DISPATCH_SUB_ACTION_SUB2: `2. Le store appelle le reducer, en lui fournissant l'**action** et la **valeur courante du state**.
+
+Cette fois, la valeur de \`action.type\` fait passer le code dans \`case 'REMOVE'\`.
+`,
+      DISPATCH_SUB_ACTION_CODE: '```store.dispatch(removeAction);```',
+      DISPATCH_SUB_ACTION_SUB3: "3. Le reducer calcule la **nouvelle valeur** du state.",
+      DISPATCH_SUB_ACTION_SUB4: "4. La valeur renvoyée par le reducer devient la valeur du state.",
+
     },
     en: {
+      STORE_CREATION: 'Store creation',
+      CAPTION_INTERNAL: "Internal (<strong>can't</strong> be accessed from outside)",
+      CAPTION_PUBLIC: "Public (can be accessed from outside)",
     }
   };
   const translateStrToLang = (lang, str) => strings[lang][str];
@@ -100,12 +257,177 @@
   const converter = new showdown.Converter();
 
   const steps = [
-    
     {
-      className: 'show show-store show-dispatch',
-      state: 'on',
+      className: 'init',
+      slide: tr('REDUX_SLIDE_1'),
     },
-
+    {
+      className: 'init',
+      slide: tr('REDUX_SLIDE_2'),
+    },
+    {
+      className: 'init',
+      slide: tr('REDUX_SLIDE_3'),
+    },
+    {
+      className: 'init',
+      slide: tr('REDUX_SLIDE_4'),
+    },
+    {
+      className: 'init slide-5',
+      slide: tr('REDUX_SLIDE_5'),
+    },
+    {
+      className: 'init',
+      slide: tr('REDUX_SLIDE_6'),
+    },
+    {
+      className: 'show',
+      state: '0',
+      title: tr('STORE_CREATION'),
+      subtitle: tr('STATE_INITIALIZATION'),
+      description: tr('STATE_INITIALIZATION_CODE'),
+      code: storeReducerCode
+    },
+    // {
+    //   className: 'show',
+    //   state: '0',
+    //   title: tr('STORE_CREATION'),
+    //   subtitle: tr('DISPATCH_INIT_ACTION'),
+    //   description: tr('DISPATCH_INIT_ACTION_DESC'),
+    //   code: storeReducerCode
+    // },
+    {
+      className: 'show show-dispatch dispatching-1',
+      state: '0',
+      title: tr('DISPATCH_ADD_ACTION'),
+      subtitle: tr('DISPATCH_ADD_ACTION_SUB1'),
+      description: tr('DISPATCH_ADD_ACTION_CODE'),
+      action: addAction,
+      code: addActionCode
+    },
+    {
+      className: 'show show-dispatch dispatching-2',
+      state: '0',
+      title: tr('DISPATCH_ADD_ACTION'),
+      subtitle: tr('DISPATCH_ADD_ACTION_SUB2'),
+      action: addAction,
+      prevState: 0,
+      code: reducerCode,
+      highlightLines: reducerCodeCaseAdd
+    },
+    {
+      className: 'show show-dispatch dispatching-3',
+      state: '0',
+      title: tr('DISPATCH_ADD_ACTION'),
+      subtitle: tr('DISPATCH_ADD_ACTION_SUB3'),
+      nextState: {
+        code: 'state + 1', result: '1'
+      },
+      code: reducerCode,
+      highlightLines: reducerCodeCaseAdd
+    },
+    {
+      className: 'show show-dispatch dispatching-4',
+      state: '1',
+      title: tr('DISPATCH_ADD_ACTION'),
+      subtitle: tr('DISPATCH_ADD_ACTION_SUB4'),
+      nextState: {
+        code: 'state + 1', result: '1'
+      }
+    },
+    {
+      className: 'show show-dispatch show-subscribe',
+      state: '1',
+      title: tr('STORE_SUBSCRIBE'),
+      subtitle: tr('STORE_SUBSCRIBE_SUB'),
+      code: storeSubscribeCode,
+    },
+    {
+      className: 'show show-dispatch show-subscribe show-getstate',
+      state: '1',
+      title: tr('STORE_GETSTATE'),
+      subtitle: tr('STORE_GETSTATE_SUB'),
+      code: storeSubscribeCode,
+    },
+    {
+      className: 'show show-dispatch dispatching-1',
+      state: '1',
+      title: tr('DISPATCH_ADD_ACTION_AGAIN'),
+      subtitle: tr('DISPATCH_ADD_ACTION_AGAIN_SUB1'),
+      description: tr('DISPATCH_ADD_ACTION_CODE'),
+      action: addAction,
+      code: addActionCode
+    },
+    {
+      className: 'show show-dispatch dispatching-2',
+      state: '1',
+      title: tr('DISPATCH_ADD_ACTION_AGAIN'),
+      subtitle: tr('DISPATCH_ADD_ACTION_SUB2'),
+      action: addAction,
+      prevState: 1,
+      code: reducerCode,
+      highlightLines: reducerCodeCaseAdd
+    },
+    {
+      className: 'show show-dispatch dispatching-3',
+      state: '1',
+      title: tr('DISPATCH_ADD_ACTION_AGAIN'),
+      subtitle: tr('DISPATCH_ADD_ACTION_SUB3'),
+      nextState: {
+        code: 'state + 1', result: '2'
+      },
+      code: reducerCode,
+      highlightLines: reducerCodeCaseAdd
+    },
+    {
+      className: 'show show-dispatch dispatching-4',
+      state: '2',
+      title: tr('DISPATCH_ADD_ACTION_AGAIN'),
+      subtitle: tr('DISPATCH_ADD_ACTION_SUB4'),
+      nextState: {
+        code: 'state + 1', result: '2'
+      }
+    },
+    {
+      className: 'show show-dispatch dispatching-1',
+      state: '2',
+      title: tr('DISPATCH_SUB_ACTION'),
+      subtitle: tr('DISPATCH_SUB_ACTION_SUB1'),
+      description: tr('DISPATCH_SUB_ACTION_CODE'),
+      action: removeAction,
+      code: subActionCode
+    },
+    {
+      className: 'show show-dispatch dispatching-2',
+      state: '2',
+      title: tr('DISPATCH_SUB_ACTION'),
+      subtitle: tr('DISPATCH_SUB_ACTION_SUB2'),
+      action: removeAction,
+      prevState: 2,
+      code: reducerCode,
+      highlightLines: reducerCodeCaseSub
+    },
+    {
+      className: 'show show-dispatch dispatching-3',
+      state: '2',
+      title: tr('DISPATCH_SUB_ACTION'),
+      subtitle: tr('DISPATCH_SUB_ACTION_SUB3'),
+      nextState: {
+        code: 'state - 1', result: '1'
+      },
+      code: reducerCode,
+      highlightLines: reducerCodeCaseSub
+    },
+    {
+      className: 'show show-dispatch dispatching-4',
+      state: '1',
+      title: tr('DISPATCH_SUB_ACTION'),
+      subtitle: tr('DISPATCH_SUB_ACTION_SUB4'),
+      nextState: {
+        code: 'state - 1', result: '1'
+      }
+    }
   ];
   const stepKeys = Object.keys(steps);
   const $body = $('body');
