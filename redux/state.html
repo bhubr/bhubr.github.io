@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Redux</title>
+  <link rel="stylesheet" href="css/prism.css">
+  <link rel="stylesheet" href="css/icons.css">
+  <link rel="stylesheet" href="css/state-styles.css">
+</head>
+<body class="init">
+
+  <header>
+    <h2 id="title"></h2>
+    <p id="subtitle"></p>
+  </header>
+
+  <main>
+
+    <div class="wrapped-component">
+
+        <div class="component">
+          <div class="caption">LightComponent</div>
+          <div class="injectedProps">
+            <div>light</div>
+            <div>dispatch</div>
+          </div>
+      
+        </div>
+        <div class="caption">LightContainer</div>
+        <div class="mapStateToProps"><span>mapStateToProps</span></div>
+        <div class="mapDispatchToProps"></div>
+        <div class="connect">
+          connect
+        </div>
+
+    </div>
+
+    <div class="store">
+      <div class="caption">Store</div>
+
+      <div class="">
+        <div id="caption-internal" class="caption caption-light"></div>
+        <div class="store-attribute state">state
+          <div id="state-value"></div>
+        </div>
+        <!-- <div class="store-attribute reducer">
+          reducer
+          <span class="icon-cog"></span>
+          <div id="next-state">
+            <div id="next-state-inner">
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div> -->
+      </div>
+
+      <div class="">
+        <div id="caption-public" class="caption caption-light"></div>
+        <div class="store-method dispatch">dispatch</div>
+        <div class="store-method getState">getState</div>
+        <div class="store-method subscribe">subscribe</div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/prism.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
+  <script>
+
+  // INTERNATIONALIZATION
+  function parseQuery(queryString) {
+    const query = {};
+    const pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+    for (let i = 0; i < pairs.length; i++) {
+        const pair = pairs[i].split('=');
+        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+    }
+    return query;
+  }
+  const strings = {
+    fr: {
+     
+    },
+    en: {
+    }
+  };
+  const translateStrToLang = (lang, str) => strings[lang][str];
+  const query = parseQuery(window.location.search);
+  const lang = query.lang || 'fr';
+  const tr = str => translateStrToLang(lang, str);
+
+  const converter = new showdown.Converter();
+
+  const steps = [
+    
+    {
+      className: 'show show-store show-dispatch',
+      state: 'on',
+    },
+
+  ];
+  const stepKeys = Object.keys(steps);
+  const $body = $('body');
+  const $slide = $('#slide');
+  const $title = $('#title');
+  const $subtitle = $('#subtitle');
+  const $description = $('#description');
+  const $stateVal = $('#state-value');
+  const $dispatchingAction = $('#dispatching-action');
+  const $prevState = $('#prev-state');
+  const $nextState = $('#next-state');
+  const $sideCode = $('#side-code');
+  $('#caption-internal').html(tr('CAPTION_INTERNAL'));
+  $('#caption-public').html(tr('CAPTION_PUBLIC'));
+  let stepIndex = 0;
+  let step;
+
+  step = steps[0];
+
+  const handleKeyPress = e => {
+    $body.removeClass();
+    const char = String.fromCharCode(e.keyCode);
+    if (!['b', 'n', 'r'].includes(char)) {
+      console.log('press either b or n');
+    }
+    if (char === 'b' && stepIndex > 0) {
+      stepIndex -= 1;
+    }
+    if (char === 'n' && stepIndex < steps.length - 1) {
+      stepIndex += 1;
+    }
+    if (char === 'r') {
+      stepIndex = 0;
+    }
+    step = steps[stepIndex];
+    if (!step) {
+      console.log('no step for', char);
+      return;
+    }
+    showStep();
+  };
+
+  const showStep = () => {
+    const {
+      className,
+      state,
+      title,
+      subtitle,
+      description,
+      action,
+      prevState,
+      nextState,
+      code,
+      slide,
+      highlightLines
+    } = step;
+    const titleHtml = converter.makeHtml(title);
+    $title.html(titleHtml);
+    const subtitleHtml = subtitle ? converter.makeHtml(subtitle) : '&nbsp;';
+    $subtitle.html(subtitleHtml);
+    const descHtml = converter.makeHtml(description || '&nbsp;');
+    $description.html(descHtml);
+    $stateVal.html(`<code>${state}</code>`);
+    if (action) {
+      $dispatchingAction.html(`<code>${action}</code>`).show();
+    } else {
+      $dispatchingAction.html('').hide();
+    }
+    if (typeof prevState !== 'undefined') {
+      $prevState.html(`<code>${prevState}</code>`).show();
+    } else {
+      $prevState.html('').hide();
+    }
+    if (typeof nextState !== 'undefined') {
+      if (className.includes('dispatching-3')) $('.reducer').addClass('working');
+      $nextState.html(`<div id="next-state-inner">
+        <span><code>${nextState.code}</code></span>
+        <span><code>${nextState.result}</code></span>
+      </div>`).addClass('show');
+    } else {
+      $('.reducer').removeClass('working');
+      $nextState.html('').removeClass('show');
+    }
+    if (typeof code !== 'undefined') {
+      $sideCode.html(`<pre><code>${code}</code></pre>`).css('visibility', 'visible');
+    } else {
+      $sideCode.html(``).css('visibility', 'hidden');
+    }
+    if (typeof slide !== 'undefined') {
+      const slideHtml = converter.makeHtml(slide);
+      $slide.html(`<div>${slideHtml}</div>`);
+    } else {
+      $slide.html('');
+    }
+
+    $body.find('code').addClass('language-javascript');
+    const codeBlocks = $body.find('code');
+    
+    $body.addClass(className);
+    Prism.highlightAll();
+    if (typeof highlightLines !== 'undefined') {
+      const highlighted = Prism.highlight(highlightLines, Prism.languages.javascript, 'javascript');
+      $sideCode.html($sideCode.html().replace(highlighted, `<span style="background:yellow">${highlighted}</span>`));
+    }
+
+    // for (let codeBlock of codeBlocks) console.log(codeBlock.innerHTML);
+  };
+
+  $body.keypress(handleKeyPress);
+  showStep();
+  </script>
+
+</body>
+</html>
