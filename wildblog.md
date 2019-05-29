@@ -7,12 +7,11 @@ On a prévu un créneau d'1h, si c'est trop juste et que tu as une contrainte ap
 Voici les opérations à réaliser, et des ressources qui peuvent t'y aider en cas de besoin :
 
 * Laisser de la marge à gauche et à droite de la page, et faire en sorte que le contenu soit centré ([tuto centrage](https://www.alsacreations.com/article/lire/539-Centrer-les-elements-ou-un-site-web-en-CSS.html)).
-* Mettre un peu de marge verticale sur le titre de la page, de façon à ce qu'il ne soit collé ni en haut de la page, ni aux articles qui le suivent (le h1 a une marge par défaut, mais il faut l'augmenter).
 * Utiliser la police de caractères Lato sur tout le site.
 * Faire en sorte que les articles se positionnent côte à côte, et pas l'un en-dessous de l'autre. La méthode importe peu.
 * Les articles doivent être entourés d'une bordure continue, grise (éventuellement arrondie mais si tu as le temps). Les bordures doivent être un peu espacées, de façon à ce que deux articles ne soient pas collés. [Tuto bordures et ombres](https://openclassrooms.com/fr/courses/1603881-apprenez-a-creer-votre-site-web-avec-html5-et-css3/1605694-creez-des-bordures-et-des-ombres)
 * Il n'est pas problématique que les articles n'aient pas la même hauteur.
-* Ajouter une image en haut de chaque article, qui ne doit pas déborder du cadre
+* Ajouter une image en haut de chaque article, qui ne doit pas déborder du cadre.
 * Ne pas utiliser Bootstrap ou autre framework CSS (mais tu peux faire du Sass si ça te semble nécessaire).
 * Avoir un HTML correct, validé par https://validator.w3.org/#validate_by_input.
 
@@ -41,9 +40,8 @@ Le template de base:
   <div class="main">
     <h1>Wild Blog</h1>
 
-    <div>
+    <div class="liste-articles">
       <div class="article">
-
         <div>
           <h2>Un article</h2>
           <p>On sait depuis longtemps que travailler avec du texte lisible et contenant du sens est source de
