@@ -10,7 +10,7 @@ Voici les opérations à réaliser, et des ressources qui peuvent t'y aider en c
 * Mettre un peu de marge verticale sur le titre de la page, de façon à ce qu'il ne soit collé ni en haut de la page, ni aux articles qui le suivent (le h1 a une marge par défaut, mais il faut l'augmenter).
 * Utiliser la police de caractères Lato sur tout le site.
 * Faire en sorte que les articles se positionnent côte à côte, et pas l'un en-dessous de l'autre. La méthode importe peu.
-* Les articles doivent être entourés d'une bordure continue, grise et arrondie. Les bordures doivent être un peu espacées, de façon à ce que deux articles ne soient pas collés. [Tuto bordures et ombres](https://openclassrooms.com/fr/courses/1603881-apprenez-a-creer-votre-site-web-avec-html5-et-css3/1605694-creez-des-bordures-et-des-ombres)
+* Les articles doivent être entourés d'une bordure continue, grise (éventuellement arrondie mais si tu as le temps). Les bordures doivent être un peu espacées, de façon à ce que deux articles ne soient pas collés. [Tuto bordures et ombres](https://openclassrooms.com/fr/courses/1603881-apprenez-a-creer-votre-site-web-avec-html5-et-css3/1605694-creez-des-bordures-et-des-ombres)
 * Il n'est pas problématique que les articles n'aient pas la même hauteur.
 * Ajouter une image en haut de chaque article, qui ne doit pas déborder du cadre
 * Ne pas utiliser Bootstrap ou autre framework CSS (mais tu peux faire du Sass si ça te semble nécessaire).
